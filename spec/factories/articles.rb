@@ -2,6 +2,6 @@ FactoryBot.define do
   factory :article do
     title { "Sample Article" }
     content { "Sample Content" }
-    slug { "sample-article" }
+    sequence(:slug) { |n| "sample-article-#{n}" }
   end
 end
