@@ -159,6 +159,9 @@ GEM
     minitest (5.15.0)
     msgpack (1.4.5)
     multipart-post (2.1.1)
+    net-http (0.2.0)
+      net-protocol
+      uri
     net-imap (0.2.3)
       digest
       net-protocol
@@ -244,6 +247,7 @@ GEM
     timeout (0.2.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
+    uri (0.11.0)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -259,6 +263,7 @@ DEPENDENCIES
   jsom-pagination
   jsonapi-serializer
   jsonapi_errors_handler
+  net-http
   octokit (~> 4.0)
   pg (~> 1.1)
   puma (~> 5.0)
