@@ -9,7 +9,7 @@ class UserAuthenticator
 
   def perform
     raise AuthenticationError if code.blank?
-    raise if token.try(:error).present?
+    raise AuthenticationError if github_token.try(:error).present?
 
     prepare_user
     @access_token = if user.access_token.present?
@@ -17,26 +17,21 @@ class UserAuthenticator
                     else
                       user.create_access_token
                     end
-
   end
 
   private
 
   def client
-    @client ||= Octokit::Client.new(
-      client_id: ENV['GITHUB_CLIENT_ID'],
-      client_secret: ENV['GITHUB_CLIENT_SECRET']
-    )
+    github_token = Rails.application.credentials.dig(:github, :access_token)
+    @client ||= Octokit::Client.new(access_token: github_token)
   end
 
-  def token
-    @token ||= client.exchange_code_for_token(code)
+  def github_token
+    @github_token ||= client.exchange_code_for_token(code)
   end
 
   def user_data
-    @user_data ||= Octokit::Client.new(
-      access_token: token
-    ).user.to_h.slice(:login, :avatar_url, :url, :name)
+    @user_data ||= Octokit::Client.new(access_token: github_token).user.to_h.slice(:login, :avatar_url, :url, :name)
   end
 
   def prepare_user
