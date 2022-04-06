@@ -8,17 +8,16 @@ class UserAuthenticator
   end
 
   def perform
-    token = client.exchange_code_for_token(code)
-    if token.try(:error).present?
-      raise AuthenticationError
-    else
-      prepare_user
-      @access_token = if user.access_token.present?
-                        user.access_token
-                      else
-                        user.create_access_token
-                      end
-    end
+    raise AuthenticationError if code.blank?
+    raise if token.try(:error).present?
+
+    prepare_user
+    @access_token = if user.access_token.present?
+                      user.access_token
+                    else
+                      user.create_access_token
+                    end
+
   end
 
   private
