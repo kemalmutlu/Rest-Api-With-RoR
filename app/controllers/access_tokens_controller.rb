@@ -6,6 +6,10 @@ class AccessTokensController < ApplicationController
     render json: result, status: :created
   end
 
+  def destroy
+    raise AuthorizationError
+  end
+
   def serializer
     AccessTokenSerializer
   end

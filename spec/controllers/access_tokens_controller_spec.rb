@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe AccessTokensController, type: :controller do
   describe '#create' do
     shared_examples_for "unauthorized_requests" do
-      let(:error) do
+      let(:authorization_error) do
         {
           status: '401',
           source: { pointer: '/code' },
@@ -19,7 +19,7 @@ RSpec.describe AccessTokensController, type: :controller do
 
       it('should return proper error body') do
         subject
-        expect(json[:errors]).to include(error)
+        expect(json[:errors]).to include(authorization_error)
       end
     end
 
@@ -67,6 +67,35 @@ RSpec.describe AccessTokensController, type: :controller do
         expect { subject }.to change{ User.count }.by(1)
         user = User.find_by(login: 'jsmith1')
         expect(json_data[:attributes][:token]).to eq(user.access_token.token)
+      end
+    end
+
+    describe "DELETE #destroy" do
+      let(:authorization_error) do
+        {
+          status: '403',
+          source: { pointer: '/headers/authorization' },
+          title: 'Not authorized',
+          detail: 'You have no right to access this resource.'
+        }
+      end
+
+      context 'when invalid request' do
+        subject { delete :destroy }
+
+        it 'should return 403 status code' do
+          subject
+          expect(response).to have_http_status(:forbidden)
+        end
+
+        it 'should return proper error json' do
+          subject
+          expect(json[:errors]).to include(authorization_error)
+        end
+      end
+
+      context 'when valid request' do
+
       end
     end
   end
