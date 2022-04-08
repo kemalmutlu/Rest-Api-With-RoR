@@ -1,5 +1,5 @@
 require 'rails_helper'
-
+include ApiHelpers
 RSpec.describe AccessTokensController, type: :controller do
   describe '#create' do
     context 'when no code provider' do
