@@ -20,6 +20,14 @@ class ArticlesController < ApplicationController
     render json: serializer.new(article)
   end
 
+  def update
+    article = Article.find(params[:id])
+    article.update!(article_params)
+    render json: serializer.new(article), status: :ok
+  rescue
+    render json: { "errors": errors(article) }, status: :unprocessable_entity
+  end
+
   def serializer
     ArticleSerializer
   end
