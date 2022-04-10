@@ -48,4 +48,15 @@ class ApplicationController < ActionController::API
     }
     render json: { "errors": [error] }, status: 403
   end
+
+  def attribute_errors(article)
+    errors = []
+    article.errors.messages.each do |attr, msg|
+      errors << {
+        source: { pointer: "/data/attributes/#{attr.to_s}" },
+        detail: msg.join
+      }
+    end
+    errors
+  end
 end
