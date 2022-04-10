@@ -168,7 +168,7 @@ RSpec.describe ArticlesController, type: :controller do
 
     context 'when trying to update not owned article' do
       let(:other_user) { create :user }
-      let(:other_article) { create :article }
+      let(:other_article) { create :article, user_id: other_user.id }
 
       subject { patch :update, params: { id: other_article.id } }
       before { request.headers['authorization'] == "Bearer #{access_token.token}" }
