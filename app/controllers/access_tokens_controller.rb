@@ -4,8 +4,7 @@ class AccessTokensController < ApplicationController
   def create
     authenticator = UserAuthenticator.new(authentication_params)
     authenticator.perform
-    result = serializer.new(authenticator.access_token)
-    render json: result, status: :created
+    render json: serializer.new(authenticator.access_token), status: :created
   end
 
   def destroy
@@ -19,6 +18,10 @@ class AccessTokensController < ApplicationController
   private
 
   def authentication_params
-    params.permit(:code).to_h.symbolize_keys
+    (standard_auth_params || params.permit(:code)).to_h.symbolize_keys
+  end
+
+  def standard_auth_params
+    params.dig(:data, :attributes)&.permit(:login, :password)
   end
 end
