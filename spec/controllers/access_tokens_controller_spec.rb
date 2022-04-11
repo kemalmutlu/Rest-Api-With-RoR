@@ -2,9 +2,9 @@ require 'rails_helper'
 include ApiHelpers
 RSpec.describe AccessTokensController, type: :controller do
   describe '#create' do
-    context 'when no code provider' do
+    context 'when no auth data provider' do
       subject { post :create }
-      it_behaves_like "unauthorized_requests"
+      it_behaves_like "unauthorized_standard_requests"
     end
 
     context 'when invalid code provider' do
@@ -17,7 +17,7 @@ RSpec.describe AccessTokensController, type: :controller do
       end
 
       subject { post :create, params: { code: 'invalid_code' } }
-      it_behaves_like "unauthorized_requests"
+      it_behaves_like "unauthorized_standard_requests"
     end
 
     context 'when success request' do
