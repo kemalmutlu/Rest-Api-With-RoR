@@ -17,7 +17,7 @@ RSpec.describe AccessTokensController, type: :controller do
       end
 
       subject { post :create, params: { code: 'invalid_code' } }
-      it_behaves_like "unauthorized_standard_requests"
+      it_behaves_like "unauthorized_oauth_requests"
     end
 
     context 'when success request' do
